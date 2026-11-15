@@ -1,0 +1,11 @@
+{
+  "version": null,
+  "image": null,
+  "template": "templates/bitbucket-pipelines.yml",
+  "triggerApp": [
+    "trigger-app/manifest.yml",
+    "trigger-app/package.json",
+    "trigger-app/package-lock.json",
+    "trigger-app/src/index.js"
+  ]
+}

@@ -1,0 +1,99 @@
+# A release of this repository, from three inputs: the version (MAJOR.MINOR.PATCH), the pre-release's number (empty for a
+# release) and the runner image's index digest, as its publishing gave it. The release's name is the version, or
+# <version>-rc.<N> for a pre-release: the image's tag on Docker Hub, and the repository's tag v<name>. Manual only, from
+# main. Each step is one of scripts/release.sh's:
+#
+#   plan     the tags (the release's own new, a release never below the newest one, no pre-release of a released
+#            version) and the template and release.json stampable; then Docker Hub's tag of the release's name, read
+#            signed in, which must name the digest given
+#   publish  Docker Hub's tag checked again, as the plan's digest step checks it, so that no run of the steps by hand
+#            stamps a digest nobody checked; the template and release.json stamped with the image by digest and the
+#            release's name, committed on main, tagged v<name>, the floating tags moved (v0 at every release and
+#            pre-release, v<MAJOR> at a release), all pushed at once with the job's own token, since nothing a release
+#            stamps is a workflow file; then the GitHub release, a pre-release marked so
+#
+# A run whose tag is already pushed with this image and name moves nothing and only makes the GitHub release when it is
+# missing; a tag that names anything else is refused. Every action is pinned by commit. Needs the secret
+# DOCKERHUB_PULL_TOKEN (a pull-only token of the image's organization on Docker Hub).
+name: Release
+run-name: Release ${{ inputs.version }}${{ inputs.rc != '' && format('-rc.{0}', inputs.rc) || '' }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "The version: MAJOR.MINOR.PATCH"
+        type: string
+        required: true
+      rc:
+        description: "The pre-release's number N, for MAJOR.MINOR.PATCH-rc.<N>; empty for a release"
+        type: string
+        required: false
+        default: ""
+      digest:
+        description: "The runner image's index digest, sha256:<64 hex>, as its publishing gave it"
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+# One release at a time: the tags are read, then written.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+# The inputs reach the scripts as variables alone, and each step checks them by their form before anything else.
+env:
+  IRONBEE_VERSION: ${{ inputs.version }}
+  IRONBEE_RC: ${{ inputs.rc }}
+  IRONBEE_IMAGE_DIGEST: ${{ inputs.digest }}
+
+jobs:
+  plan:
+    name: Plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Get main
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: main
+          fetch-depth: 0                                       # every tag, and the commits they name
+          persist-credentials: false
+      - name: The tags
+        run: bash scripts/release.sh plan
+      - name: Log in to Docker Hub
+        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4.7.0
+        with:
+          username: ironbeeai                                  # an organization access token signs in with the organization's name
+          password: ${{ secrets.DOCKERHUB_PULL_TOKEN }}
+      - name: The image's digest
+        run: bash scripts/release.sh digest
+
+  # The one job that writes, with this repository's scripts alone and the job's own token.
+  publish:
+    name: Publish
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Get main
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: main
+          fetch-depth: 0                                       # every tag: the floating tags are moved from where they are
+          persist-credentials: true                            # for the push
+      - name: Log in to Docker Hub
+        uses: docker/login-action@81c6f93d4bc991e510b342a00b419b3bb4efc5c6 # v4.7.0
+        with:
+          username: ironbeeai
+          password: ${{ secrets.DOCKERHUB_PULL_TOKEN }}
+      - name: Check the digest again, stamp, commit, tag and push
+        run: bash scripts/release.sh publish
+      - name: The GitHub release
+        run: bash scripts/release.sh github-release
+        env:
+          GH_TOKEN: ${{ github.token }}

@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+"""A stand-in for docker in the release's tests: a registry held in the JSON file $STUB_DOCKER_STATE, each call's
+arguments recorded in $STUB_DOCKER_CALLS (one JSON list a line). No network.
+
+The state: tags ({image:tag: the index digest it names}); manifests ({image@digest: what `imagetools inspect --raw`
+prints}). Only `buildx imagetools inspect` is stubbed."""
+import json
+import os
+import sys
+
+
+def fail(message: str) -> int:
+    sys.stderr.write(message + "\n"); return 1
+
+
+def ref_of(args: list) -> str:
+    """The one argument that is no option and no option's value."""
+    refs = [a for i, a in enumerate(args) if not a.startswith("-") and not (i and args[i - 1] in ("--format", "-f"))]
+    return refs[0]
+
+
+def main(argv: list) -> int:
+    with open(os.environ["STUB_DOCKER_STATE"]) as f: state = json.load(f)
+    with open(os.environ["STUB_DOCKER_CALLS"], "a") as f: f.write(json.dumps(argv) + "\n")
+    if argv[:3] == ["buildx", "imagetools", "inspect"]:
+        ref = ref_of(argv[3:])
+        if "--raw" in argv:
+            if ref not in state.get("manifests", {}): return fail(f"ERROR: {ref}: not found")
+            print(json.dumps(state["manifests"][ref])); return 0
+        digest = state.get("tags", {}).get(ref) or (ref.split("@", 1)[1] if ref in state.get("manifests", {}) else None)
+        if digest is None: return fail(f"ERROR: {ref}: not found")
+        print(json.dumps({"mediaType": "application/vnd.oci.image.index.v1+json", "digest": digest})); return 0
+    return fail(f"stub docker: {' '.join(argv[:3])} is not stubbed")
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

@@ -1,0 +1,101 @@
+{
+  "description": "A placeholder of the reviewer's own trigger cases, written from the reviewer's rules, until this file is a byte-identical copy of the reviewer's: each case is a comment's raw text and its author's type, whether the comment addresses the reviewer (its mention rule), and whether a thread whose first comment it is counts as the reviewer's (an app user's comment carrying the identity marker). The app takes every case the reviewer counts, and may take more.",
+  "cases": [
+    {
+      "raw": "@ironbee-ai review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "Fixed both. @IronBee-AI full review please",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "@ironbee-ai why is this a problem?",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "@İronbee-ai review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "> @ironbee-ai review\n\nquoting an earlier command",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "```\n@ironbee-ai review\n```",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "    ```\n@ironbee-ai review\n```\n@ironbee-ai resume",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "Thanks @ironbee-ai-bot",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "write to x@ironbee-ai or see /@ironbee-ai",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "@{712020:a1344cb1-2a52-4e49-9401-19d37092ca81} review",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "[//]: # \"ironbee x @ironbee-ai\"\nno mention here",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "A finding.\n\n[//]: # \"ironbee f1\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": true
+    },
+    {
+      "raw": "A finding.\n\n[//]: # \"ironbee f1\"",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "Review body.\n\n[//]: # \"ironbee review:42\"\n[//]: # \"ironbee-data eyJ2IjoxfQ==\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": true
+    },
+    {
+      "raw": "> [//]: # \"ironbee f1\"\n\nquoting one of ours",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "A build note from another pipeline.",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": false
+    }
+  ]
+}

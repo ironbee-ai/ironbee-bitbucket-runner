@@ -1,0 +1,16 @@
+{
+  "name": "ironbee-runner-trigger",
+  "version": "1.0.0",
+  "private": true,
+  "description": "IronBee's trigger app for Bitbucket: starts a repository's ironbee-code-review pipeline for a comment that addresses the reviewer or answers a thread of its",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@forge/api": "6.4.3"
+  }
+}

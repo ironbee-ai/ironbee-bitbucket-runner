@@ -1,0 +1,33 @@
+pipelines:
+  custom:
+    ironbee-code-review:                          # IronBee's code review, release __IRONBEE_RELEASE__
+      - step:
+          name: IronBee Code Review
+          image:
+            name: __IRONBEE_IMAGE__
+            username: ironbeeai
+            password: $IRONBEE_REGISTRY_TOKEN
+          # runs-on: [self.hosted, linux]         # your own runner, when the model is inside your network
+          max-time: 120
+          concurrency-group: ironbee-code-review-${{BITBUCKET_PR_ID}}
+          clone:
+            enabled: false
+          auth:
+            system:
+              scopes:
+                - read:pullrequest:bitbucket
+                - write:pullrequest:bitbucket
+                - read:repository:bitbucket
+                - read:git:bitbucket
+          script:
+            - ironbee-runner
+
+triggers:
+  pullrequest-created:
+    - condition: glob(BITBUCKET_BRANCH, "**")
+      pipelines:
+        - ironbee-code-review
+  pullrequest-updated:
+    - condition: glob(BITBUCKET_BRANCH, "**")
+      pipelines:
+        - ironbee-code-review

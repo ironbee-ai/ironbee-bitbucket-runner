@@ -1,0 +1,84 @@
+# The repository's checks, on a pull request into main and on main: the tests (the release script, the block by its
+# fixed names, release.json's shape, the trigger app's manifest and lockfile), shellcheck over the scripts, the trigger
+# app's own tests with Node's test runner, and actionlint over the workflows. Every action is pinned by commit, and
+# actionlint by its release's checksum.
+name: Build
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+      - name: Install the tests' packages
+        run: python -m pip install --disable-pip-version-check pytest==9.1.1 PyYAML==6.0.3
+      - name: Tests
+        run: python -m pytest tests -q
+
+  trigger-app:
+    name: Trigger app
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: trigger-app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: "22"
+      # As the setup installs it on a customer's machine: from the lockfile, running no package's scripts.
+      - name: Install from the lockfile
+        run: npm ci --ignore-scripts
+      - name: Tests
+        run: npm test
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      # lib.sh is sourced, with no shebang of its own.
+      - name: shellcheck
+        run: |
+          shellcheck --version
+          shellcheck --shell=bash --external-sources --severity=warning scripts/*.sh
+      - name: Install actionlint
+        env:
+          ACTIONLINT_VERSION: 1.7.12
+          ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+        run: |
+          archive="$RUNNER_TEMP/actionlint.tar.gz"
+          curl --fail --silent --show-error --location --retry 3 --output "$archive" \
+            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          echo "$ACTIONLINT_SHA256  $archive" | sha256sum --check --strict
+          tar -xzf "$archive" -C "$RUNNER_TEMP" actionlint
+      - name: actionlint
+        run: |
+          "$RUNNER_TEMP/actionlint" -color .github/workflows/*.yml

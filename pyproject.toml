@@ -1,0 +1,16 @@
+# The repository's tests and lint; nothing here is built or installed. The build installs pytest and PyYAML.
+[project]
+name = "ironbee-bitbucket-runner"
+version = "0.0.0"
+description = "IronBee's code review on Bitbucket: the block's template, the trigger app's source and the release scripts' tests"
+requires-python = ">=3.13"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 180
+
+[tool.ruff.lint]
+ignore = ["E701", "E702"]

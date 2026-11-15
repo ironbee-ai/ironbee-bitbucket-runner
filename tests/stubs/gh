@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+"""A stand-in for `gh api` in the release's tests: GitHub's releases of one repository, held in the JSON file
+$STUB_GH_STATE and changed by the calls that write, each call recorded in $STUB_GH_CALLS (one JSON a line). No network.
+
+The state: repo ("owner/name"); tokens ({token: who it is}); releases ({tag: GitHub release}); fail ([{method, path,
+status, times, made}]: the next calls whose path starts so answer that status, 0 for no answer at all; with `made` the
+call is done first, and only its answer lost). Its answers and errors are written as gh writes them: the body on stdout,
+and on an error `gh: <message> (HTTP <status>)` on stderr with exit 1."""
+import json
+import os
+import sys
+import urllib.parse
+
+
+def load() -> dict:
+    with open(os.environ["STUB_GH_STATE"]) as f: return json.load(f)
+
+
+def save(state: dict) -> None:
+    with open(os.environ["STUB_GH_STATE"], "w") as f: json.dump(state, f, indent=1)
+
+
+def record(call: dict) -> None:
+    with open(os.environ["STUB_GH_CALLS"], "a") as f: f.write(json.dumps(call) + "\n")
+
+
+def error(status: int, message: str) -> int:
+    if status == 0:
+        sys.stderr.write("error connecting to api.github.com\ncheck your internet connection or https://githubstatus.com\n"); return 1
+    sys.stdout.write(json.dumps({"message": message, "status": str(status)}))
+    sys.stderr.write(f"gh: {message} (HTTP {status})\n"); return 1
+
+
+def route(state: dict, method: str, path: str, body):
+    parts = urllib.parse.urlsplit(path).path.strip("/").split("/")
+    if parts[:1] != ["repos"] or "/".join(parts[1:3]) != state["repo"]: return 404, "Not Found"
+    rest = parts[3:]
+    if method == "GET" and len(rest) == 3 and rest[:2] == ["releases", "tags"]:
+        r = state.setdefault("releases", {}).get(rest[2]); return (200, r) if r else (404, "Not Found")
+    if method == "POST" and rest == ["releases"]:
+        releases = state.setdefault("releases", {})
+        if body["tag_name"] in releases: return 422, "Validation Failed"
+        state["next_id"] = state.get("next_id", 1000) + 1
+        releases[body["tag_name"]] = {**body, "id": state["next_id"]}; return 201, releases[body["tag_name"]]
+    return 404, "Not Found"
+
+
+def main(argv: list) -> int:
+    if argv[:1] != ["api"]: sys.stderr.write("stub gh: only `gh api` is stubbed\n"); return 2
+    method, source, path, i = "GET", None, None, 1
+    while i < len(argv):
+        a = argv[i]
+        if a in ("-X", "--method"): method = argv[i + 1]; i += 2
+        elif a == "--input": source = argv[i + 1]; i += 2
+        elif a.startswith("-"): sys.stderr.write(f"stub gh: {a} is not stubbed\n"); return 2
+        elif path is None: path = a; i += 1
+        else: sys.stderr.write(f"stub gh: a second path {a}\n"); return 2
+    body = None
+    if source is not None:
+        with (sys.stdin if source == "-" else open(source)) as f: body = json.load(f)
+    token = os.environ.get("GH_TOKEN", ""); state = load()
+    record({"method": method, "path": path, "token": token, "body": body})
+    for f in state.get("fail", []):
+        if f["method"] == method and path.startswith(f["path"]) and f.get("times", 1) > 0:
+            f["times"] = f.get("times", 1) - 1
+            if f.get("made") and token in state["tokens"]: route(state, method, path, body)      # done, and its answer lost
+            save(state); return error(f["status"], "Server Error")
+    if token not in state["tokens"]: return error(401, "Bad credentials")
+    status, out = route(state, method, path, body); save(state)
+    if status >= 400: return error(status, out)
+    sys.stdout.write(json.dumps(out)); return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
