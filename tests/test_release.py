@@ -32,7 +32,19 @@ def stamped_json(text: str, digest: str, name: str) -> str:
     return json.dumps({**json.loads(text), "version": name, "image": f"{IMAGE}@{digest}"}, indent=2) + "\n"
 
 
+def unreleased(text: str) -> str:
+    """The template as it is before the first release: its two placeholders."""
+    return IMAGE_LINE.sub(r"\g<1>__IRONBEE_IMAGE__", NAME_LINE.sub(r"\g<1>__IRONBEE_RELEASE__", text))
+
+
+def unreleased_json(text: str) -> str:
+    return json.dumps({**json.loads(text), "version": None, "image": None}, indent=2) + "\n"
+
+
 class Release(ScriptTest):
+    """Each test's repository starts from main's files as they are: a release's values once main is released, the
+    placeholders before. A test that needs the form before the first release puts it back (`unreleased`)."""
+
     def setUp(self) -> None:
         super().setUp()
         self.origin, self.work = self.tmp / "origin.git", self.tmp / "work"
@@ -46,6 +58,14 @@ class Release(ScriptTest):
         self.git("remote", "add", "origin", str(self.origin))
         self.git("push", "--quiet", "origin", "main")
         self.registry = {"tags": {f"{IMAGE}:1.0.0-rc.2": DIGEST, f"{IMAGE}:1.0.0": DIGEST}}
+
+    def unreleased(self) -> tuple:
+        """The working copy's template and release.json put back to their form before the first release, uncommitted."""
+        for path, put_back in ((TEMPLATE, unreleased), (RELEASE, unreleased_json)):
+            (self.work / path).write_text(put_back((self.work / path).read_text()))
+        template, release = (self.work / TEMPLATE).read_text(), (self.work / RELEASE).read_text()
+        self.assertEqual((template.count("__IRONBEE_IMAGE__"), template.count("__IRONBEE_RELEASE__")), (1, 1))
+        return template, release
 
     def git(self, *args, cwd=None) -> str:
         env = {"PATH": os.environ["PATH"], "HOME": str(self.tmp), **GIT}
@@ -201,18 +221,21 @@ class Plan(Release):
         self.assertIn("v1.0.0 is released: it takes no more pre-releases", ran.out)
 
     def test_a_template_the_release_could_not_stamp(self):
-        text = (self.work / TEMPLATE).read_text()
-        variants = {"no release comment": (text.replace("# IronBee's code review, release", "# release"), "the pipeline's line naming the release is there 0 times"),
-                    "the image line twice": (text.replace("            name: __IRONBEE_IMAGE__\n", "            name: __IRONBEE_IMAGE__\n" * 2),
-                                             "the step image's name line is there 2 times"),
-                    "another image": (text.replace("__IRONBEE_IMAGE__", "docker.io/acme/other:latest"), "the step image's name line is there 0 times"),
-                    "a short digest": (text.replace("__IRONBEE_IMAGE__", f"{IMAGE}@sha256:{'a' * 63}"), "the step image's name line is there 0 times")}
-        for label, (variant, says) in variants.items():
-            with self.subTest(label):
-                (self.work / TEMPLATE).write_text(variant)
-                ran = self.release("plan")
-                self.assertEqual(ran.code, 2, ran.out)
-                self.assertIn(f"{TEMPLATE}: {says}", ran.out)
+        """In the form main holds and in the form before the first release: the step image's line is found by its form."""
+        for form, text in (("main's", (self.work / TEMPLATE).read_text()), ("unreleased", unreleased((self.work / TEMPLATE).read_text()))):
+            [line] = [l for l in text.splitlines() if IMAGE_LINE.fullmatch(l)]
+            value = IMAGE_LINE.fullmatch(line).group(2)
+            variants = {"no release comment": (text.replace("# IronBee's code review, release", "# release"), "the pipeline's line naming the release is there 0 times"),
+                        "the image line twice": (text.replace(line + "\n", (line + "\n") * 2), "the step image's name line is there 2 times"),
+                        "another image": (text.replace(line, line.replace(value, "docker.io/acme/other:latest")), "the step image's name line is there 0 times"),
+                        "a short digest": (text.replace(line, line.replace(value, f"{IMAGE}@sha256:{'a' * 63}")), "the step image's name line is there 0 times")}
+            for label, (variant, says) in variants.items():
+                with self.subTest(form=form, variant=label):
+                    self.assertNotEqual(variant, text)
+                    (self.work / TEMPLATE).write_text(variant)
+                    ran = self.release("plan")
+                    self.assertEqual(ran.code, 2, ran.out)
+                    self.assertIn(f"{TEMPLATE}: {says}", ran.out)
 
     def test_a_release_json_of_another_shape(self):
         good = json.loads((self.work / RELEASE).read_text())
@@ -264,7 +287,7 @@ class Stamp(Release):
         return [(a, b) for a, b in zip(before.splitlines(), after) if a != b]
 
     def test_the_placeholders_become_the_image_and_the_name_and_nothing_else(self):
-        template, release = (ROOT / TEMPLATE).read_text(), (ROOT / RELEASE).read_text()
+        template, release = self.unreleased()
         ran = self.release("stamp")
         self.assertEqual(ran.code, 0, ran.out)
         changed = self.changed_lines(TEMPLATE, template)
@@ -273,6 +296,18 @@ class Stamp(Release):
         self.assertEqual(json.loads((self.work / RELEASE).read_text()), {**json.loads(release), "version": "1.0.0-rc.2", "image": f"{IMAGE}@{DIGEST}"})
         self.assertEqual(len(self.changed_lines(RELEASE, release)), 2)                        # the file keeps its form
         self.assertIn(f"stamped {TEMPLATE} and {RELEASE}: {IMAGE}@{DIGEST} (was none), release 1.0.0-rc.2 (was none)", ran.out)
+
+    def test_main_as_it_is_takes_a_release_over_whatever_it_holds(self):
+        """main's own files: a release's values once main is released, the placeholders before."""
+        template, release = (self.work / TEMPLATE).read_text(), (self.work / RELEASE).read_text()
+        held = json.loads(release)
+        ran = self.release("stamp", rc="9", digest=OTHER)
+        self.assertEqual(ran.code, 0, ran.out)
+        self.assertEqual([b.strip() for _, b in self.changed_lines(TEMPLATE, template)],
+                         ["ironbee-code-review:                          # IronBee's code review, release 1.0.0-rc.9", f"name: {IMAGE}@{OTHER}"])
+        self.assertEqual(json.loads((self.work / RELEASE).read_text()), {**held, "version": "1.0.0-rc.9", "image": f"{IMAGE}@{OTHER}"})
+        self.assertEqual(len(self.changed_lines(RELEASE, release)), 2)
+        self.assertIn(f"(was {held['image'] or 'none'}), release 1.0.0-rc.9 (was {held['version'] or 'none'})", ran.out)
 
     def test_a_second_release_over_the_first_ones_values(self):
         self.assertEqual(self.release("stamp").code, 0)
