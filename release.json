@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0-rc.7",
-  "image": "docker.io/ironbeeai/ironbee-code-review-runner@sha256:13a326fe34af9bb2bcc34b83717a0ed101e7a47efc7de93fefba2858b7b677a4",
+  "version": "1.0.0-rc.8",
+  "image": "docker.io/ironbeeai/ironbee-code-review-runner@sha256:b0d70bf52444f89ad3e26a67dfe5533e9898574e3736d8a842b5d4b28128871d",
   "template": "templates/bitbucket-pipelines.yml",
   "triggerApp": [
     "trigger-app/manifest.yml",
