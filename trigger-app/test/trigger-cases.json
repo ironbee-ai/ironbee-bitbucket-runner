@@ -1,6 +1,11 @@
 {
-  "description": "A placeholder of the reviewer's own trigger cases, written from the reviewer's rules, until this file is a byte-identical copy of the reviewer's: each case is a comment's raw text and its author's type, whether the comment addresses the reviewer (its mention rule), and whether a thread whose first comment it is counts as the reviewer's (an app user's comment carrying the identity marker). The app takes every case the reviewer counts, and may take more.",
   "cases": [
+    {
+      "raw": "@ironbee-ai",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
     {
       "raw": "@ironbee-ai review",
       "authorType": "user",
@@ -8,25 +13,235 @@
       "ours": false
     },
     {
-      "raw": "Fixed both. @IronBee-AI full review please",
+      "raw": "Fixed both. @ironbee-ai review",
       "authorType": "user",
       "addressed": true,
       "ours": false
     },
     {
-      "raw": "@ironbee-ai why is this a problem?",
+      "raw": "Thanks.\n\n@ironbee-ai is the check still needed here?",
       "authorType": "user",
       "addressed": true,
       "ours": false
     },
     {
-      "raw": "@İronbee-ai review",
+      "raw": "@IronBee-AI pause",
       "authorType": "user",
       "addressed": true,
       "ours": false
     },
     {
-      "raw": "> @ironbee-ai review\n\nquoting an earlier command",
+      "raw": "@İRONBEE-Aİ resume",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "@ıronbee-aı review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "@ironbee-ai, why is this a problem?",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "@ironbee-ai: review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "Over to @ironbee-ai.",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "(@ironbee-ai) please review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "@ironbee-ai’s view?",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "@ironbee-aí review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": " @ironbee-ai review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "\\@ironbee-ai review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "[@ironbee-ai](https://bitbucket.org/ironbee-ai) review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "`@ironbee-ai` review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "~~~\n@ironbee-ai review\n~~~",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "    @ironbee-ai review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "Please look.\r\n@ironbee-ai review\r\n",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "> earlier words\n\n@ironbee-ai review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "```\ncode\n```\n@ironbee-ai review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "> quoted\n@ironbee-ai review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "> quoted\r@ironbee-ai review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "> quoted@ironbee-ai review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "﻿> @ironbee-ai review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "@ironbee-a![](https://example.test/badges/kind-unknown-light.svg)i review",
+      "authorType": "user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "@ironbee-ai review",
+      "authorType": "app_user",
+      "addressed": true,
+      "ours": false
+    },
+    {
+      "raw": "Write to team@ironbee-ai.example.",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "@ironbee-airline review",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "@ironbee-ai-bot review",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "@ironbee-ai_x review",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "see /@ironbee-ai",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "x-@ironbee-ai review",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "@@ironbee-ai review",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "é@ironbee-ai review",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "@ironbee-aié review",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "٣@ironbee-ai review",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "@ironbee‑ai review",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "> @ironbee-ai review",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "   > @ironbee-ai review",
       "authorType": "user",
       "addressed": false,
       "ours": false
@@ -38,63 +253,207 @@
       "ours": false
     },
     {
-      "raw": "    ```\n@ironbee-ai review\n```\n@ironbee-ai resume",
+      "raw": "Look:\n```\n@ironbee-ai review",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "````\n@ironbee-ai review\n````",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "[//]: # \"ironbee @ironbee-ai\"",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "@{712020:2b1e0c4a-ironbee} review",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "Looks good to me.",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "🟠 **High** · 🐛 correctness\n\n**The radius is never checked.**\n\n[//]: # \"ironbee terra:widgets__7:correctness:0:0:1\"\n[//]: # \"ironbee-data eyJraW5kIjoicG9zdCIsImlkIjoicDEiLCJmb3JtYXQiOjF9\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": true
+    },
+    {
+      "raw": "**claim**\n\n   [//]: # \"ironbee p1\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": true
+    },
+    {
+      "raw": "**claim**\n\n[//]: # \"ironbee p1\"   ",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": true
+    },
+    {
+      "raw": "**claim**\r\n\r\n[//]: # \"ironbee p1\"\r\n",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": true
+    },
+    {
+      "raw": "**IronBee review**\n\n**1 finding** on `abc1234`\n\n[//]: # \"ironbee review:widgets__7\"\n[//]: # \"ironbee-data eyJraW5kIjoicG9zdCIsImlkIjoicDEiLCJmb3JtYXQiOjF9\"\n[//]: # \"ironbee-review aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": true
+    },
+    {
+      "raw": "Looks addressed.\n\n[//]: # \"ironbee reply:p1:abc1234\"\n[//]: # \"ironbee-data eyJraW5kIjoicG9zdCIsImlkIjoicDEiLCJmb3JtYXQiOjF9\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": true
+    },
+    {
+      "raw": "_(retracted)_\n\n[//]: # \"ironbee say:898377001\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": true
+    },
+    {
+      "raw": "@{712020:ercan} Paused: no automatic review of this pull request until `@ironbee-ai` resume.\n\n[//]: # \"ironbee say:898377001\"\n[//]: # \"ironbee-data eyJraW5kIjoicG9zdCIsImlkIjoicDEiLCJmb3JtYXQiOjF9\"",
+      "authorType": "app_user",
+      "addressed": true,
+      "ours": true
+    },
+    {
+      "raw": "```\n[//]: # \"ironbee p1\"\n```",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": true
+    },
+    {
+      "raw": "**claim**[//]: # \"ironbee p1\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": true
+    },
+    {
+      "raw": "**claim**\n\n[//]: # \"ironbee p1\"",
+      "authorType": "user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "Build passed.",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "> [//]: # \"ironbee p1\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "see [//]: # \"ironbee p1\" here",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "    [//]: # \"ironbee p1\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "\t[//]: # \"ironbee p1\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "[//]: # \"ironbee-data eyJraW5kIjoicG9zdCIsImlkIjoicDEiLCJmb3JtYXQiOjF9\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "[//]: # \"ironbee-review aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "[//]: # \"IRONBEE p1\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "[//]: # 'ironbee p1'",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "[//]: #  \"ironbee p1\"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "[//]: # \"ironbee \"",
+      "authorType": "app_user",
+      "addressed": false,
+      "ours": false
+    },
+    {
+      "raw": "> quoted @ironbee-ai review",
       "authorType": "user",
       "addressed": true,
       "ours": false
     },
     {
-      "raw": "Thanks @ironbee-ai-bot",
+      "raw": "> quoted @ironbee-ai review",
       "authorType": "user",
-      "addressed": false,
+      "addressed": true,
       "ours": false
     },
     {
-      "raw": "write to x@ironbee-ai or see /@ironbee-ai",
+      "raw": "> quoted\u000b@ironbee-ai review",
       "authorType": "user",
-      "addressed": false,
+      "addressed": true,
       "ours": false
     },
     {
-      "raw": "@{712020:a1344cb1-2a52-4e49-9401-19d37092ca81} review",
+      "raw": "> quoted\f@ironbee-ai review",
       "authorType": "user",
-      "addressed": false,
+      "addressed": true,
       "ours": false
     },
     {
-      "raw": "[//]: # \"ironbee x @ironbee-ai\"\nno mention here",
+      "raw": "> quoted\u001c@ironbee-ai review",
       "authorType": "user",
-      "addressed": false,
+      "addressed": true,
       "ours": false
     },
     {
-      "raw": "A finding.\n\n[//]: # \"ironbee f1\"",
-      "authorType": "app_user",
-      "addressed": false,
-      "ours": true
-    },
-    {
-      "raw": "A finding.\n\n[//]: # \"ironbee f1\"",
+      "raw": "> quoted\u001d@ironbee-ai review",
       "authorType": "user",
-      "addressed": false,
+      "addressed": true,
       "ours": false
     },
     {
-      "raw": "Review body.\n\n[//]: # \"ironbee review:42\"\n[//]: # \"ironbee-data eyJ2IjoxfQ==\"",
-      "authorType": "app_user",
-      "addressed": false,
-      "ours": true
-    },
-    {
-      "raw": "> [//]: # \"ironbee f1\"\n\nquoting one of ours",
-      "authorType": "app_user",
-      "addressed": false,
-      "ours": false
-    },
-    {
-      "raw": "A build note from another pipeline.",
-      "authorType": "app_user",
-      "addressed": false,
+      "raw": "> quoted\u001e@ironbee-ai review",
+      "authorType": "user",
+      "addressed": true,
       "ours": false
     }
   ]

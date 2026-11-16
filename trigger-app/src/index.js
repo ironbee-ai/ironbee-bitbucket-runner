@@ -70,14 +70,24 @@ function isPerson(comment) {
   return !type || type === 'user';
 }
 
+function isHash(value) {
+  return typeof value === 'string' && value !== '';
+}
+
+// Whether the pull request gives no destination commit, as one opened through the API may: the start then names the
+// head in its place, since Bitbucket asks for one and the run reads the pull request itself, never that commit.
+function noBase(pull) {
+  return !isHash(pull?.destination?.commit?.hash);
+}
+
 // The start of the custom pipeline with the pull request as its target, from the pull request's own branches and
 // commits: Bitbucket asks for the head and the destination's commit with them.
 export function startBody(pull) {
   const source = pull?.source?.branch?.name;
   const destination = pull?.destination?.branch?.name;
   const head = pull?.source?.commit?.hash;
-  const base = pull?.destination?.commit?.hash;
-  if (![source, destination, head, base].every((value) => typeof value === 'string' && value !== '') || !Number.isSafeInteger(pull.id)) {
+  const base = noBase(pull) ? head : pull.destination.commit.hash;
+  if (![source, destination, head, base].every(isHash) || !Number.isSafeInteger(pull.id)) {
     return null;
   }
   return { target: { type: 'pipeline_pullrequest_target', source, destination, destination_commit: { hash: base }, commit: { hash: head },
@@ -201,14 +211,15 @@ async function handle(event, ids, log) {
     log('pull request incomplete', { why });
     return;
   }
+  const base = noBase(pr.data) ? 'head' : undefined;                // the destination's commit the start named in its place
   const answer = await bitbucket.requestBitbucket(route`/2.0/repositories/${workspace}/${repository}/pipelines/`,
     { method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   if (answer.status === 201) {
     const run = await answer.json().catch(() => ({}));
-    log('started', { why, build: Number.isSafeInteger(run?.build_number) ? run.build_number : undefined });
+    log('started', { why, base, build: Number.isSafeInteger(run?.build_number) ? run.build_number : undefined });
     return;
   }
-  log('start refused', { why, status: answer.status, error: await refusal(answer) });
+  log('start refused', { why, base, status: answer.status, error: await refusal(answer) });
 }
 
 export async function onComment(event) {

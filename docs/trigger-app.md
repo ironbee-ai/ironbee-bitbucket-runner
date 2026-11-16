@@ -39,8 +39,9 @@ For each comment made on a pull request of the workspace:
 4. **The pull request is read:** it must be open, and its source must be the repository itself (a fork's pull request
    runs no pipeline of the repository's).
 5. **The start:** `POST …/pipelines/` with the pull request as its target, its source and destination branches, its
-   head and the destination's commit as the pull request gives them, and the custom pipeline `ironbee-code-review`, as
-   Bitbucket's own trigger would. It hands the run nothing: the run finds the comment in the conversation. A start
+   head and the destination's commit as the pull request gives them (the head in its place where the pull request gives
+   none, as one opened through the API may: the run never reads that commit), and the custom pipeline
+   `ironbee-code-review`, as Bitbucket's own trigger would. It hands the run nothing: the run finds the comment in the conversation. A start
    Bitbucket refuses (a repository whose file has no such pipeline, for one) is logged and dropped.
 
 It leaves to the run whether the comment's writer may ask: the read of a person's permission needs a repository scope

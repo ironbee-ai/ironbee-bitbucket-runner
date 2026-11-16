@@ -130,7 +130,12 @@ describe('the start', () => {
     const pull = { id: 4, source: { branch: { name: 'feature/x' }, commit: { hash: '1fb1be025070' } }, destination: { branch: { name: 'main' }, commit: { hash: '761a90b91dd6' } } };
     assert.deepEqual(startBody(pull), { target: { type: 'pipeline_pullrequest_target', source: 'feature/x', destination: 'main', destination_commit: { hash: '761a90b91dd6' },
       commit: { hash: '1fb1be025070' }, pullrequest: { id: 4 }, selector: { type: 'custom', pattern: 'ironbee-code-review' } } });
-    assert.equal(startBody({ ...pull, destination: { branch: { name: 'main' } } }), null);
+    // a pull request opened through the API may give no destination commit: the head stands in for it
+    for (const destination of [{ branch: { name: 'main' } }, { branch: { name: 'main' }, commit: null }, { branch: { name: 'main' }, commit: { hash: '' } }]) {
+      assert.deepEqual(startBody({ ...pull, destination }).target.destination_commit, { hash: '1fb1be025070' });
+    }
+    assert.equal(startBody({ ...pull, source: { branch: { name: 'feature/x' } } }), null);
+    assert.equal(startBody({ ...pull, destination: { commit: { hash: '761a90b91dd6' } } }), null);
     assert.equal(startBody({ ...pull, id: '4' }), null);
   });
 });

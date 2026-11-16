@@ -214,10 +214,18 @@ describe('what ends a run before the start', () => {
   it('a pull request that cannot be read, or lacks what the start needs', async () => {
     hub({ comments: { 101: person(101, '@ironbee-ai review') }, pr: [500, 'Internal Server Error'] });
     await app.onComment(event());
-    hub({ comments: { 101: person(101, '@ironbee-ai review') }, pr: pull({ destination: { branch: { name: 'main' }, repository: pull().destination.repository } }) });
+    hub({ comments: { 101: person(101, '@ironbee-ai review') }, pr: pull({ source: { branch: { name: 'feature/secret-branch' }, repository: pull().source.repository } }) });
     await app.onComment(event());
     assert.deepEqual(lines().map((l) => [l.outcome, l.status]), [['pull request unread', 500], ['pull request incomplete', undefined]]);
     assert.ok(!forge.calls.some((c) => c.method === 'POST'));
+  });
+
+  it('a pull request that gives no destination commit is started with its head in that commit\'s place', async () => {
+    hub({ comments: { 101: person(101, '@ironbee-ai review') }, pr: pull({ destination: { ...pull().destination, commit: null } }) });
+    await app.onComment(event());
+    const [start] = forge.calls.filter((c) => c.method === 'POST');
+    assert.deepEqual([start.body.target.destination_commit, start.body.target.commit], [{ hash: '1fb1be025070' }, { hash: '1fb1be025070' }]);
+    assert.deepEqual(lines(), [{ workspace: WS, repository: REPO, pullRequest: '4', comment: '101', outcome: 'started', why: 'addressed', base: 'head', build: 23 }]);
   });
 });
 
@@ -268,7 +276,7 @@ describe('the log', () => {
     for (const word of [SECRET_WORDS, 'secret-branch', 'main', 'acme/shop', 'shop', 'ironbee-ai', 'Why?', 'finding']) {
       assert.ok(!text.includes(word), word);
     }
-    const allowed = new Set(['workspace', 'repository', 'pullRequest', 'comment', 'outcome', 'why', 'status', 'state', 'build', 'error']);
+    const allowed = new Set(['workspace', 'repository', 'pullRequest', 'comment', 'outcome', 'why', 'base', 'status', 'state', 'build', 'error']);
     assert.deepEqual(lines().flatMap((l) => Object.keys(l)).filter((key) => !allowed.has(key)), []);
     assert.ok(logged.mock.calls.every((c) => c.arguments.length === 1));
   });
