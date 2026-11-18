@@ -109,11 +109,13 @@ The repository is the one named, else the directory's git remote; the branch is 
 check that asks for at least 1 successful build on a pull request's last commit, with none failed or in progress; then
 "Prevent a merge with unresolved merge checks". Before it asks for the second, it names every other merge check of the
 branch, each of which then holds a merge too, says that it does not read a custom merge check an app defines, which is
-set up elsewhere, and, where "No changes are requested" is on without its reset, what that pair means. A restriction
-that is there is left as it is, whatever its count, and nothing is removed: a second run changes nothing. `-y`
-(`--yes`) makes each change without asking; with no terminal and no `-y`, each is left undone and said. It ends with
-what is on the branch now. It reads no plan, so its words say both: on a Premium workspace the checks hold a merge, on
-Free and Standard they only warn.
+set up elsewhere, and, where "No changes are requested" is on without its reset, what that pair means and that it does
+not add the reset, which a repository admin turns on in the branch restrictions. Where Bitbucket refuses the builds
+check, the command leaves the enforcement undone, since the enforcement is there to make the builds check hold. A
+restriction that is there is left as it is, whatever its count, and nothing is removed: a second run changes nothing.
+`-y` (`--yes`) makes each change without asking; with no terminal and no `-y`, each is left undone and said, with where
+a repository admin makes it by hand. It ends with what is on the branch now. It reads no plan, so its words say both: on
+a Premium workspace the checks hold a merge, on Free and Standard they only warn.
 
 `ironbee runner check` reads the same restrictions of the default branch, as information: whether its merge checks ask
 for a successful build and are enforced, what that does on each plan, and, where the builds check or the enforcement is
