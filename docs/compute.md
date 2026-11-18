@@ -6,8 +6,12 @@ On Atlassian's runners, or on a Bitbucket runner of yours.
   runners.
 - **A model inside your network needs a runner of yours there**, named by the step's `runs-on`. It connects outward
   only.
-- **A workspace on Premium that limits its private content to listed addresses** must list the address its runs leave
-  from. Atlassian's own runners are likely refused there, so such a workspace uses its own runner.
+- **A workspace on Premium that limits its private content to listed addresses**, or that requires two-step
+  verification, works from Atlassian's runners: neither reaches the step's own token, so the run reads the pull
+  request, clones it, comments and sets its status as anywhere else. The list does reach a repository access token,
+  which is what reads a [rules repository](setup.md#3-the-variables) (`IRONBEE_KNOWLEDGE_TOKEN`): from Atlassian's runners, whose
+  addresses no list holds, that read is refused, and the review goes on without your rules and says so in the log. To
+  have the rules read, run the step on a runner of yours (`runs-on`) at an address the list holds.
 
 ## The step
 
