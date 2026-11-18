@@ -191,7 +191,7 @@ A comment a person publishes later from a pending review is due when a run sees 
 | `warning: this account has more developers this month than its licence covers; reviews go on, and IronBee will be in touch` | nothing: reviews go on |
 | `warning: the licence for IronBee's self-hosted review ends soon; renew it to keep pull requests reviewed` | renew the licence |
 | `warning: runner <version> is served until <day>; move … to <version> before then` | move the block to that release before that day |
-| `warning: the rules repository <path> could not be read (…): <why>; the review goes on without it` | `IRONBEE_KNOWLEDGE_REPOSITORY`, `IRONBEE_KNOWLEDGE_REF`, `IRONBEE_KNOWLEDGE_TOKEN` (a repository access token of the rules repository, with read access) |
+| `warning: the rules repository <path> could not be read (…): <why>; the review goes on without it` | `IRONBEE_KNOWLEDGE_REPOSITORY`, `IRONBEE_KNOWLEDGE_REF`, `IRONBEE_KNOWLEDGE_TOKEN` (a repository access token of the rules repository, with read access). On a Premium workspace that limits its private content to listed addresses, a step on Atlassian's runners at an address the list does not hold is refused that read (a 403): run the step on a runner of yours at a listed address ([Where the step runs](compute.md)) |
 | `IronBee: the complete did not land: <why>` | nothing: the run stands as it ended |
 
 ## A newer state format

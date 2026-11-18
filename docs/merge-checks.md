@@ -78,12 +78,50 @@ Bitbucket's merge checks are set per branch, in the repository's branch restrict
 - **"Minimum number of successful builds for the last commit with no failed builds and no in progress builds"**: a
   merge waits for every build status on the head to be neither failed nor in progress. A blocking review is a failed
   build; a review under way is a build in progress; a run that died is a failed build until the pipeline runs again on
-  that head.
+  that head. A head with no build at all waits too, for want of a successful one.
 - **"Prevent a merge with unresolved merge checks"**, on Premium alone: without it, the checks warn and the merge button
   works.
 
-The command does not set them: `ironbee runner check` reports, as information, whether a repository's merge checks would
-hold a merge on a failed build.
+**The second holds every merge check of the branch, not the builds check alone.** With "Prevent a merge with
+unresolved merge checks" on, each merge check the branch has holds a merge: a number of approvals, of default
+reviewers' or of a review group's approvals, no changes requested, every task completed, every comment resolved, at
+most a number of commits behind, every dependency merged. A check that only warned becomes a condition of every merge
+into the branch: a pull request whose review passed is still refused while it lacks an approval the branch asks for.
+
+**"No changes are requested" goes with "Reset requested changes when the source branch is modified".** Under the
+enforcement a request for changes holds a merge until it is taken back, and a later review of the reviewer's does not
+take back one it made. With the reset on, set in the same place, the next push to the pull request's source branch
+clears it.
+
+### With the CLI
+
+`ironbee runner setup` does not set them. `ironbee host merge-check` does, from your machine, with your
+`BITBUCKET_TOKEN` ([Sign in](setup.md#sign-in)), of whose scopes it needs `read:repository:bitbucket` and
+`admin:repository:bitbucket`, as a repository admin:
+
+```sh
+ironbee host merge-check acme/shop
+ironbee host merge-check acme/shop --branch release
+```
+
+The repository is the one named, else the directory's git remote; the branch is the repository's default branch unless
+`--branch` names one. The command reads the branch's restrictions and adds, where absent, each after asking: the merge
+check that asks for at least 1 successful build on a pull request's last commit, with none failed or in progress; then
+"Prevent a merge with unresolved merge checks". Before it asks for the second, it names every other merge check of the
+branch, each of which then holds a merge too, says that it does not read a custom merge check an app defines, which is
+set up elsewhere, and, where "No changes are requested" is on without its reset, what that pair means and that it does
+not add the reset, which a repository admin turns on in the branch restrictions. Where Bitbucket refuses the builds
+check, the command leaves the enforcement undone, since the enforcement is there to make the builds check hold. A
+restriction that is there is left as it is, whatever its count, and nothing is removed: a second run changes nothing.
+`-y` (`--yes`) makes each change without asking; with no terminal and no `-y`, each is left undone and said, with where
+a repository admin makes it by hand. It ends with what is on the branch now. It reads no plan, so its words say both: on
+a Premium workspace the checks hold a merge, on Free and Standard they only warn.
+
+`ironbee runner check` reads the same restrictions of the default branch, as information: whether its merge checks ask
+for a successful build and are enforced, what that does on each plan, and, where the builds check or the enforcement is
+absent, that `ironbee host merge-check` adds it. `ironbee runner setup` and `add` end with a note that names it.
+
+A restriction is removed where it was set: **Repository settings** > **Branch restrictions**.
 
 ## What the status is worth
 
