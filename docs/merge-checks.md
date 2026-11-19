@@ -89,9 +89,9 @@ most a number of commits behind, every dependency merged. A check that only warn
 into the branch: a pull request whose review passed is still refused while it lacks an approval the branch asks for.
 
 **"No changes are requested" goes with "Reset requested changes when the source branch is modified".** Under the
-enforcement a request for changes holds a merge until it is taken back, and a later review of the reviewer's does not
-take back one it made. With the reset on, set in the same place, the next push to the pull request's source branch
-clears it.
+enforcement a person's request for changes holds a merge until that person takes it back, after the fix too. With the
+reset on, set in the same place, the next push to the pull request's source branch clears it. IronBee's review never
+requests changes: it comments, so this check holds a merge on people's requests alone.
 
 ### With the CLI
 
@@ -123,13 +123,11 @@ absent, that `ironbee host merge-check` adds it. `ironbee runner setup` and `add
 
 A restriction is removed where it was set: **Repository settings** > **Branch restrictions**.
 
-## What the status is worth
+## What the status means
 
 **What the status says, in IronBee's cloud product and here.** It reflects the findings that nobody who counts has
 turned down. The pull request's author, and anyone else who counts, can close a finding with a reply; someone who may
-write to the repository can resolve a thread, `retract`, or `pause` and then push. The status is a team's own
-discipline made visible, not a control over its members: a team that must hold merges against its own developers
-requires a human approval beside it.
+write to the repository can resolve a thread, `retract`, or `pause`.
 
 What Bitbucket adds:
 
@@ -140,6 +138,3 @@ What Bitbucket adds:
   a review under way holds it (a build in progress), a dead run holds it (a failed build). But a head no run was started
   for holds nothing of the reviewer's (a branch without the block; an event Bitbucket started no pipeline for), and no
   number closes that: every run of the review pipeline adds a successful build, a gated one and an edit's too.
-- **Forgeable, as on GitHub.** Anyone who can push a branch can change the file on it, read the variables the step is
-  given, and write a status or a comment Bitbucket does not tell from the reviewer's ([Identity](identity.md)). That is
-  Bitbucket's rule for every secured variable and every status a pipeline writes, not this feature's.

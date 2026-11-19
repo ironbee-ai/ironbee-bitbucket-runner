@@ -17,7 +17,7 @@
 | An image in what the model writes | shown | left as its text and its address ([What reaches IronBee](what-reaches-ironbee.md#untrusted-input)) |
 | Release merges | read whole | read whole |
 | Labels | none on Bitbucket: `skipLabels` has no effect | the same |
-| Secrets | none of yours in the repository | secured variables, readable by whoever can push a branch; no protected place below Premium |
+| Secrets | none of yours in the repository | secured Pipelines variables of the repository (or of the workspace) |
 | Compute | IronBee's | each run is build minutes of your workspace's plan; your own runner's are not counted ([Where the step runs](compute.md)) |
 | Per-repository settings | the console | the console, on the repository's IronBee project; variables only for a repository left without one |
 | Rules and memories you keep | the repository's `.ironbee/` files | those, and a rules repository for all your repositories |
@@ -56,11 +56,11 @@ repository, licence and compatibility rules.
 | Bitbucket's rule | What it means here |
 |---|---|
 | No pipeline starts on a comment, and a webhook cannot start one. | The trigger app, a Forge app of your own, starts the pipeline for a comment that is for the reviewer ([The trigger app](trigger-app.md)). |
-| A pull request's events run the file its source branch brings. | A branch without the block starts nothing; anyone who can push a branch can change what runs ([Identity](identity.md#what-a-pushed-branch-can-do)). |
+| A pull request's events run the file its source branch brings. | A branch without the block starts nothing. |
 | No pipeline starts for a fork's pull request. | Not reviewed; nothing of the reviewer's appears on it. |
 | A thread a person resolves raises no event a pipeline starts on. | Recorded by the next review that reads the pull request again. |
 | The step's token reads its own repository alone. | A rules repository needs a token of its own. |
-| No merge check names a status. | The status cannot require that a review ran ([Merge checks](merge-checks.md#what-the-status-is-worth)). |
+| No merge check names a status. | The status cannot require that a review ran ([Merge checks](merge-checks.md#what-the-status-means)). |
 | A build status cannot be deleted. | A retract writes a `neutral` over a review's conclusion; nothing is taken away. |
 | A pull request holds at most 200 comments. | A round that cannot post its comments is published as its body alone ([Troubleshooting](troubleshooting.md)). |
 | Bitbucket has no draft review another call could publish. | A round's comments appear one by one; the next run removes what a killed run left. |

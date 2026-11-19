@@ -129,10 +129,10 @@ IronBee. Without the trigger app, a reply or a command waits for the pull reques
 | Page | What it covers |
 |---|---|
 | [Setup](docs/setup.md) | `ironbee runner setup`, and the same steps by hand: Pipelines, the variables, the block, the registration, the trigger app |
-| [Merge checks](docs/merge-checks.md) | the `Code Review Result` status, the pipeline's own status, Bitbucket's merge checks, and what the status is worth |
+| [Merge checks](docs/merge-checks.md) | the `Code Review Result` status, the pipeline's own status, Bitbucket's merge checks, and what the status means |
 | [Where the step runs](docs/compute.md) | Atlassian's runners, your own Bitbucket runner, and the build minutes |
 | [The trigger app](docs/trigger-app.md) | what it does, what it holds, whose it is, and what to keep in mind |
-| [Identity](docs/identity.md) | the step's token, who the reviewer writes as, and what a pushed branch can do |
+| [Identity](docs/identity.md) | the step's token, who the reviewer writes as, who may ask, and the rules repository's token |
 | [What reaches IronBee](docs/what-reaches-ironbee.md) | the bodies sent, what is never sent, what stays with you |
 | [What differs](docs/differences.md) | from IronBee's cloud product on Bitbucket, and from the GitHub runner |
 | [Troubleshooting](docs/troubleshooting.md) | what you see when something goes wrong, and what to do |

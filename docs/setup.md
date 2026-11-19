@@ -9,8 +9,7 @@ setup made by hand and one made by the command are the same objects, and `ironbe
 From IronBee:
 
 - **The self-hosted runner enabled on your IronBee account.** Its licence has an end date and a developer limit.
-- **Your account's API key.** IronBee's API takes it in `X-API-Key`. It is your account's key: it can do on IronBee's
-  API everything that key can do, and this feature adds no narrower one.
+- **Your account's API key.** IronBee's API takes it in `X-API-Key`.
 - **A registry token.** IronBee's runner image is in a private repository on Docker Hub, and IronBee gives each
   customer a read-only token for it. Being able to pull the image entitles you to nothing by itself: every run still
   asks IronBee whether it may run.

@@ -1,4 +1,4 @@
-# Identity, and what a pushed branch can do
+# Identity
 
 The reviewer reads the repository and writes its comments and the `Code Review Result` status with one credential: the
 token Bitbucket gives each step, `BITBUCKET_OAUTH_TOKEN`. There is nothing to create, and IronBee holds no credential
@@ -31,25 +31,3 @@ The step's token reaches its own repository alone: another repository of the sam
 were none. A rules repository therefore needs a token of its own: a **repository access token** of the rules repository
 with read access (**Repository settings** > **Access tokens**, on every plan), set as the secured variable
 `IRONBEE_KNOWLEDGE_TOKEN`. When the rules repository cannot be read, the review goes on and says so.
-
-## What a pushed branch can do
-
-A pull request's events run **the `bitbucket-pipelines.yml` its source branch brings**. So anyone who can push a branch
-to the repository can, on that branch:
-
-- change the block, or any step, and run it;
-- read every variable a step is given, the secured ones included, by printing it from a step of their own;
-- write a build status named `Code Review Result`, or comments carrying the reviewer's marker and state, as
-  `Bitbucket Pipelines`, which Bitbucket does not tell from the reviewer's.
-
-Atlassian says the same of every secured variable: it is Bitbucket's rule, not this feature's, and the base of
-[what the status is worth](merge-checks.md#what-the-status-is-worth). A workspace's variables widen it to everyone who
-can push to any repository of the workspace, which is why the repository's variables are the default. Below Premium,
-Bitbucket has no variable only a protected branch's pipelines read.
-
-What a step writes, other pipelines' steps write as too: `Bitbucket Pipelines` is the one identity of every step
-token. The reviewer's state lives in its comments as hidden lines, unsigned, as on every host: anyone who can post as
-that identity can change it.
-
-The trigger app holds a power of its own, its developers' rather than a pushing person's
-([The trigger app](trigger-app.md#whose-power-it-is)).

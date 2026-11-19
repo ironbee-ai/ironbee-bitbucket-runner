@@ -166,13 +166,12 @@ the step's container), the pipelines' logs and the trigger app's log stay with y
 | Credential | Where it lives | Who can use it |
 |---|---|---|
 | the step's token | made by Bitbucket for each step, ends with it | the step; limited to its repository and its scopes |
-| `IRONBEE_API_KEY`, the registry token, the model's key, the rules repository's token, the Jev key | secured variables of the repository (or of the workspace) | every pipeline of the repository (of the workspace), so whoever can push a branch there ([Identity](identity.md#what-a-pushed-branch-can-do)) |
-| the trigger app's own token | Atlassian's, for the function of your own app | the function; and so whoever can deploy to the app: the members of its developer space who may deploy ([The trigger app](trigger-app.md#whose-power-it-is)) |
+| `IRONBEE_API_KEY`, the registry token, the model's key, the rules repository's token, the Jev key | secured variables of the repository (or of the workspace) | every pipeline of the repository (of the workspace) |
+| the trigger app's own token | Atlassian's, for the function of your own app | the function, deployed by the members of its developer space who may deploy ([The trigger app](trigger-app.md#whose-power-it-is)) |
 | your Atlassian API token at setup (`FORGE_API_TOKEN`) | the environment of the CLI's run | Forge's CLI, for that run |
 | your `BITBUCKET_TOKEN` at setup | the environment of the CLI's run | the CLI, for that run; never stored by it, never sent to IronBee |
 
 IronBee holds none of the Bitbucket credentials, the model's, the rules repository's, the Jev key or the trigger app's.
-The API key is your account's one key, as on every host.
 
 ## Untrusted input
 

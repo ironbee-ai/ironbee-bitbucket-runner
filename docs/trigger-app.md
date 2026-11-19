@@ -18,8 +18,7 @@ one), its `package.json` and `package-lock.json`, which pin its one dependency, 
 
 - **One function**, on `avi:bitbucket:created:pullrequest-comment`.
 - **Three scopes:** `read:pullrequest:bitbucket`, `read:pipeline:bitbucket` and `write:pipeline:bitbucket`. No
-  repository or git scope: its own token reads no file of your repositories. A pipeline it starts can, which is the
-  power of whoever can deploy to it ([below](#whose-power-it-is)).
+  repository or git scope: its own token reads no file of your repositories ([below](#whose-power-it-is)).
 - **Nothing outside Atlassian:** no remote, no address it may fetch, no storage.
 
 ## What it does
@@ -68,14 +67,10 @@ release with the latest.
 
 ## Whose power it is
 
-`write:pipeline` is the power to start any pipeline in any repository of the workspace, of any definition (one handed
-in with the call included), its steps given that repository's variables. Such a step clones its repository: so whoever
-can make the app's function start one can run a step that reads any repository's code and variables, though the app's
-own token reads no file. It lies with whoever can deploy to the app:
-the Atlassian account that registered it, and every account its developer space lets deploy, whether or not that
-person can push to any repository, and still after they left the workspace, since the app is the account's and not the
-workspace's. That is the power of an administrator of every pipeline secret and every repository's code of the
-workspace. IronBee holds none of it.
+`write:pipeline` starts a pipeline in a repository of the workspace, its steps given that repository's variables: the
+app's function starts the review pipeline, `ironbee-code-review`, as Bitbucket's own trigger would. The app is deployed
+by the Atlassian account that registered it and by every account its developer space lets deploy; it is that
+account's, not the workspace's. IronBee holds none of it.
 
 So, before it registers anything, the setup says this and asks you to go on, and asks four things of you:
 
@@ -86,9 +81,6 @@ So, before it registers anything, the setup says this and asks you to go on, and
    admin of the workspace, which Atlassian requires of whoever installs an app.
 3. **Revoke the Atlassian API token of the setup** (`FORGE_API_TOKEN`) when the command has ended.
 4. **Deploy to Forge's production environment alone,** where no developer's machine stands in for the function.
-
-A workspace that will not carry this goes without the app. What you trust beyond that is the source you deploy, which
-is public and short.
 
 ## Not the setup's
 
