@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-rc.13",
+  "version": "1.0.0",
   "image": "docker.io/ironbeeai/ironbee-code-review-runner@sha256:9472a997eb67631e5e00000f2114121ba53d1656297826be674d5d93c5676e0d",
   "template": "templates/bitbucket-pipelines.yml",
   "triggerApp": [
