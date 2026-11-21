@@ -1,10 +1,10 @@
 pipelines:
   custom:
-    ironbee-code-review:                          # IronBee's code review, release 1.0.0
+    ironbee-code-review:                          # IronBee's code review, release 1.1.0-rc.1
       - step:
           name: IronBee Code Review
           image:
-            name: docker.io/ironbeeai/ironbee-code-review-runner@sha256:9472a997eb67631e5e00000f2114121ba53d1656297826be674d5d93c5676e0d
+            name: docker.io/ironbeeai/ironbee-code-review-runner@sha256:39da641e94d0f286bfa6de3b58605d35b21fca882208ead75c694f09ac5e7c1a
             username: ironbeeai
             password: $IRONBEE_REGISTRY_TOKEN
           # runs-on: [self.hosted, linux]         # your own runner, when the model is inside your network
