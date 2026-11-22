@@ -1,6 +1,6 @@
 pipelines:
   custom:
-    ironbee-code-review:                          # IronBee's code review, release 1.1.0-rc.2
+    ironbee-code-review:                          # IronBee's code review, release 1.1.0
       - step:
           name: IronBee Code Review
           image:
