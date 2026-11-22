@@ -104,7 +104,7 @@ directory's git remote.
 | `--run-reports false` | a run tells IronBee only that it started |
 | `--workspace-variables` | the workspace's variables instead of each repository's (a workspace admin; read by every pipeline of the workspace) |
 | `--runs-on <label,…>` | your own Bitbucket runner's labels, written as the step's `runs-on`: `self.hosted,linux` for an `amd64` runner, `self.hosted,linux.arm64` for an `arm64` one ([Where the step runs](compute.md)) |
-| `--version <release>` | the release the block names, `1.0.0` (or a pre-release's whole name, `1.0.0-rc.7`); the latest release when not given |
+| `--version <release>` | the release the block names, `1.1.0` (or a pre-release's whole name, `1.1.0-rc.1`); the latest release when not given |
 | `--update` | move a block that is there, and the trigger app, to the latest release or to `--version`'s |
 | `--direct` | commit to the default branch instead of opening a pull request, where that is allowed (below) |
 | `--no-trigger-app` | leave the trigger app out |
@@ -153,7 +153,7 @@ Before it registers anything, the command says whose the app will be and what th
    there from its lockfile, with `npm ci --ignore-scripts`: no package's install script runs on your machine.
 2. `forge register <name> -s <developer space> -y` registers the app in the developer space, and at once the command
    writes `IRONBEE_TRIGGER_APP`, a variable of the workspace that records the app's id and the release:
-   `{"app":"ari:cloud:ecosystem::app/<uuid>","release":"1.0.0"}`. A run of the command that stops after this finds
+   `{"app":"ari:cloud:ecosystem::app/<uuid>","release":"1.1.0"}`. A run of the command that stops after this finds
    the app again and makes no second one.
 3. `forge deploy -e production --non-interactive` deploys the source to the app's production environment.
 4. `forge install -e production -p Bitbucket -s bitbucket.org/<workspace> --confirm-scopes --non-interactive`
@@ -238,9 +238,10 @@ from IronBee, use that address in place of the default one. The answer:
 
 `created` is `false` when the project was already there; the call may be repeated. It is refused, and nothing changes,
 when the self-hosted runner is not enabled on the account (`SELF_HOSTED_RUNNER_NOT_ENABLED`), when the account is
-suspended (`SELF_HOSTED_RUNNER_SUSPENDED`), when the licence has ended (`SELF_HOSTED_RUNNER_LICENCE_ENDED`), and when
-IronBee's cloud product reviews the repository (`REPOSITORY_REVIEWED_BY_CLOUD`): two reviewers on one pull request
-would both post, so turn its code review off in the console first.
+suspended (`SELF_HOSTED_RUNNER_SUSPENDED`), when the licence has ended (`SELF_HOSTED_RUNNER_LICENCE_ENDED`), when the
+account's code review is turned off in the console (`CODE_REVIEW_DISABLED`), and when IronBee's cloud product reviews
+the repository (`REPOSITORY_REVIEWED_BY_CLOUD`): two reviewers on one pull request would both post, so turn its code
+review off in the console first.
 
 **A repository left without a project.** `noProject` names why (`project_limit`, `project_archived`, `name_taken`),
 and `project` is `null`. Such a repository is still reviewed, with your account's settings, and with its per-project
@@ -289,7 +290,7 @@ The line it prints is the value. A value that does not begin with `base64:` is r
 
 Add the block of the release you choose to your repository's `bitbucket-pipelines.yml`, on the default branch, by a
 pull request of your own. The release's block is [`templates/bitbucket-pipelines.yml`](../templates/bitbucket-pipelines.yml)
-at its tag (`v1.0.0`), with the image's digest and the release's name in it; `release.json` at that tag names the same.
+at its tag (`v1.1.0`), with the image's digest and the release's name in it; `release.json` at that tag names the same.
 
 - **A file with pipelines of its own** keeps them: the block is one more entry under `pipelines.custom`, and one more
   condition under `triggers.pullrequest-created` and `triggers.pullrequest-updated` (a file takes twenty conditions a
@@ -315,7 +316,7 @@ first. As a workspace admin who is a member of the developer space, with Forge's
    ```sh
    mkdir ironbee-runner-trigger && cd ironbee-runner-trigger
    for f in manifest.yml package.json package-lock.json src/index.js; do
-     curl --fail --create-dirs -o "$f" "https://raw.githubusercontent.com/ironbee-ai/ironbee-bitbucket-runner/v1.0.0/trigger-app/$f"
+     curl --fail --create-dirs -o "$f" "https://raw.githubusercontent.com/ironbee-ai/ironbee-bitbucket-runner/v1.1.0/trigger-app/$f"
    done
    npm ci --ignore-scripts
    ```
@@ -333,7 +334,7 @@ first. As a workspace admin who is a member of the developer space, with Forge's
    line of JSON with that id and the release:
 
    ```json
-   {"app":"ari:cloud:ecosystem::app/<uuid>","release":"1.0.0"}
+   {"app":"ari:cloud:ecosystem::app/<uuid>","release":"1.1.0"}
    ```
 
    Without it, `ironbee runner setup` would later take the app for missing and register a second one.

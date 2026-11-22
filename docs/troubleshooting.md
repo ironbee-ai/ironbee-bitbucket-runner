@@ -77,6 +77,7 @@ stays, until a run can write the conclusion.
 | IronBee's reviews are suspended for this account; contact IronBee. | `SELF_HOSTED_RUNNER_SUSPENDED` | contact IronBee |
 | The licence for IronBee's self-hosted review has ended; contact IronBee to renew it. | `SELF_HOSTED_RUNNER_LICENCE_ENDED` | renew the licence; the next event is reviewed |
 | This version of the IronBee runner is no longer served; move … to `<version>`. | `RUNNER_VERSION_UNSUPPORTED` | move the block to that release: `ironbee runner setup --update --version <version>` |
+| Code review is turned off for this account in IronBee; turn it on in the console's code review settings before the runner reviews. | `CODE_REVIEW_DISABLED` | turn the account's code review on in the console's code review settings; the next event is reviewed |
 | IronBee's cloud reviews this repository; turn its code review off in the console before the runner reviews it. | `REPOSITORY_REVIEWED_BY_CLOUD` | turn the repository's code review off in the console |
 | Missing or invalid credentials | `UNAUTHORIZED` | `IRONBEE_API_KEY` is wrong, or a rotated key past its grace period |
 | IronBee could not be reached, so this pull request was not reviewed. | — | check that the step can reach IronBee's API (`api.service.ironbee.ai`, or the address in `IRONBEE_API_URL`), then re-run the pipeline, or ask `@ironbee-ai review` |
