@@ -61,7 +61,7 @@ minute. Forge bills an app's use to its developer, here you, past a free allowan
 Yours. You are its developer: its logs are yours, a new version is yours to deploy (`ironbee runner setup --update`, at
 a later release), and IronBee holds no token of it, cannot change its code and sees nothing of what it does.
 
-The workspace's variable `IRONBEE_TRIGGER_APP` records it: `{"app":"ari:cloud:ecosystem::app/<uuid>","release":"1.0.0"}`,
+The workspace's variable `IRONBEE_TRIGGER_APP` records it: `{"app":"ari:cloud:ecosystem::app/<uuid>","release":"1.1.0"}`,
 no secret. The runner never reads it; the setup and `ironbee runner check` do, to find the app again and to compare its
 release with the latest.
 

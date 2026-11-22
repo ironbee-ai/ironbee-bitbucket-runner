@@ -50,7 +50,7 @@ What a release puts into your `bitbucket-pipelines.yml`, beside whatever pipelin
 ```yaml
 pipelines:
   custom:
-    ironbee-code-review:                          # IronBee's code review, release 1.0.0
+    ironbee-code-review:                          # IronBee's code review, release 1.1.0
       - step:
           name: IronBee Code Review
           image:
@@ -143,14 +143,14 @@ its inputs a variable of the same name here (`model-provider` is `IRONBEE_MODEL_
 
 ## Versions
 
-A release is a tag `v1.0.0` of this repository, never moved: its template names the image `1.0.0` by digest and its
+A release is a tag `v1.1.0` of this repository, never moved: its template names the image `1.1.0` by digest and its
 comment names the release, and its `trigger-app/` is the app's source of that release. `release.json` at the tag says
 the same for the CLI. `ironbee runner setup` writes the latest release in full, or the one `--version` names; a block
 that is there keeps its release until `--update` moves it, and `ironbee runner check` says when a newer release exists.
 [CHANGELOG.md](CHANGELOG.md) says what each release changed.
 
 - `v1` follows the newest 1.x release, and is what the CLI reads by default.
-- **Pre-releases**, `v1.0.0-rc.<N>`, name the image `1.0.0-rc.<N>`: builds for IronBee's own tests before the release,
+- **Pre-releases**, `v1.1.0-rc.<N>`, name the image `1.1.0-rc.<N>`: builds for IronBee's own tests before the release,
   marked as pre-releases on GitHub and not for production. `v0` follows the newest of every release and pre-release,
   for IronBee's own demos.
 - Within a major version, nothing you set is renamed or removed: the variables, the pipeline's name, the concurrency
