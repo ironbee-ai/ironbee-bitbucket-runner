@@ -147,6 +147,7 @@ A release is a tag `v1.0.0` of this repository, never moved: its template names 
 comment names the release, and its `trigger-app/` is the app's source of that release. `release.json` at the tag says
 the same for the CLI. `ironbee runner setup` writes the latest release in full, or the one `--version` names; a block
 that is there keeps its release until `--update` moves it, and `ironbee runner check` says when a newer release exists.
+[CHANGELOG.md](CHANGELOG.md) says what each release changed.
 
 - `v1` follows the newest 1.x release, and is what the CLI reads by default.
 - **Pre-releases**, `v1.0.0-rc.<N>`, name the image `1.0.0-rc.<N>`: builds for IronBee's own tests before the release,

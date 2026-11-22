@@ -238,9 +238,10 @@ from IronBee, use that address in place of the default one. The answer:
 
 `created` is `false` when the project was already there; the call may be repeated. It is refused, and nothing changes,
 when the self-hosted runner is not enabled on the account (`SELF_HOSTED_RUNNER_NOT_ENABLED`), when the account is
-suspended (`SELF_HOSTED_RUNNER_SUSPENDED`), when the licence has ended (`SELF_HOSTED_RUNNER_LICENCE_ENDED`), and when
-IronBee's cloud product reviews the repository (`REPOSITORY_REVIEWED_BY_CLOUD`): two reviewers on one pull request
-would both post, so turn its code review off in the console first.
+suspended (`SELF_HOSTED_RUNNER_SUSPENDED`), when the licence has ended (`SELF_HOSTED_RUNNER_LICENCE_ENDED`), when the
+account's code review is turned off in the console (`CODE_REVIEW_DISABLED`), and when IronBee's cloud product reviews
+the repository (`REPOSITORY_REVIEWED_BY_CLOUD`): two reviewers on one pull request would both post, so turn its code
+review off in the console first.
 
 **A repository left without a project.** `noProject` names why (`project_limit`, `project_archived`, `name_taken`),
 and `project` is `null`. Such a repository is still reviewed, with your account's settings, and with its per-project

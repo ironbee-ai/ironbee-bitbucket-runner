@@ -9,7 +9,7 @@ them in full.
 pipeline; IronBee receives nothing of it, and holds no token of it.
 
 Every call carries your API key in `X-API-Key`; the runner's calls carry its version in `User-Agent`
-(`ironbee-runner/1.0.0`).
+(`ironbee-runner/1.1.0`).
 
 ## Registration: `PUT /v1/code-review-repositories`
 
@@ -42,7 +42,7 @@ pushed over.
   "action": "review",
   "trigger": "bitbucket_pipelines",
   "developer": 169735042635783,
-  "runner": { "version": "1.0.0" } }
+  "runner": { "version": "1.1.0" } }
 ```
 
 | Member | What it is |
@@ -77,7 +77,7 @@ checked against its schema before it is sent.
   "round": 2,
   "read": "delta",
   "depth": "standard",
-  "profile": "ironbee-self-hosted-standard",
+  "profile": "self-hosted-standard",
   "customized": false,
   "classifier": "llm",
   "size": { "class": "M", "reviewableLines": 870, "files": 14 },
@@ -100,7 +100,7 @@ checked against its schema before it is sent.
 | `round` | the review's round on the pull request |
 | `read` | what a review read: `whole`, `delta` (what changed since the last round) or `nothing`; `null` when no review ran |
 | `depth` | `quick`, `standard` or `deep` |
-| `profile` | the profile the run used: `ironbee-self-hosted-quick`, `-standard` or `-deep` |
+| `profile` | the profile the run used: `self-hosted-quick`, `-standard` or `-deep` |
 | `customized` | whether a value of your review file was applied |
 | `classifier` | `llm` (your model answered the classifier's questions) or `jev` (Jev under your own key) |
 | `size` | the size class (`S` to `XXXL`), the reviewable line count, and the file count |
@@ -125,7 +125,7 @@ With `IRONBEE_RUN_REPORTS` set to `false`, a run's start sends only this, and no
 ```json
 { "repository": { "provider": "bitbucket", "path": "acme/shop" },
   "developer": 169735042635783,
-  "runner": { "version": "1.0.0" },
+  "runner": { "version": "1.1.0" },
   "reports": false }
 ```
 
